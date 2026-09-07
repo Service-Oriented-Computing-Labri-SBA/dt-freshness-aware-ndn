@@ -47,7 +47,7 @@ tabulate
 Assume:
 
 ```bash
-export NS3_ROOT=/home/fablab/Desktop/ndnSIM/ns-3
+export NS3_ROOT="$HOME/ndnSIM/ns-3"
 ```
 
 Clone this repository and enter it:
@@ -128,6 +128,40 @@ cd "$NS3_ROOT"
 
 The run creates per-request and network-level CSV files under the specified result directory.
 
+### 3.1 Simulation command-line parameters
+
+The main parameters accepted by `dt-freshness-study` are summarized below.
+
+| Parameter | Example | Meaning | Mainly relevant to |
+|---|---:|---|---|
+| `--arm` | `D` | Selects the evaluated mechanism: `A` = IP/UDP - No Cache, `B` = NDN - No Cache, `C` = NDN - Native Cache, `D` = NDN - Freshness-Aware Cache (Proposed). | All arms |
+| `--experiment` | `e1` | Selects the experiment scenario. `e1` evaluates the freshness-efficiency trade-off; `e4` evaluates heterogeneous strict/relaxed freshness requirements. | All arms |
+| `--run` | `1` | Run/repetition identifier used to distinguish independent repetitions and their output directories. | All arms |
+| `--simulationTime` | `60` | Total simulation duration in seconds. | All arms |
+| `--warmupTime` | `5` | Initial warm-up interval in seconds. Measurements collected during this period are excluded from the main evaluation. | All arms |
+| `--updatePeriodMs` | `10` | Period, in milliseconds, at which the DT producer samples/updates the physical state. A smaller value represents more frequent DT synchronization. | All arms |
+| `--requestRateHz` | `10` | Mean consumer request rate in requests per second. | All arms |
+| `--requestJitterMs` | `5` | Random timing variation applied around the nominal request interval, in milliseconds. | All arms |
+| `--requestTimeoutMs` | `80` | Maximum time a request is allowed to remain outstanding before being recorded as a timeout. | All arms |
+| `--freshnessDeliveryGuardMs` | `2` | Additional downstream-delivery allowance used by the proposed mechanism when checking whether cached DT state is expected to remain valid by the time it reaches the consumer. | Arm D |
+| `--payloadBytes` | `512` | Size of the DT Data payload in bytes. | All arms |
+| `--cacheSize` | `1` | MEC Content Store capacity, in packets, for the single-object DT experiment. A value of `0` disables caching. | Arms B/C/D |
+| `--fmaxMs` | `100` | Application-specific maximum acceptable DT state age, $F_{\max}$, in milliseconds. A smaller value imposes a stricter freshness requirement. | Primarily Arm D |
+| `--nativeFreshnessMs` | `500` | Producer-defined NDN `FreshnessPeriod`, in milliseconds, used by the native caching baseline. | Arm C |
+| `--outputRoot` | `single-run-results` | Root directory where the run's CSV outputs and metadata are written. | All arms |
+
+For the proposed mechanism, the cache-validity decision is based on
+
+$$
+A_{\mathrm{expected}} = A_{\mathrm{cache}} + G_{\mathrm{downstream}},
+$$
+
+and cached Data is accepted only if
+
+$$
+A_{\mathrm{expected}} \leq F_{\max}.
+$$
+
 ## 4. Run the complete paper matrix
 
 The standard configuration uses:
@@ -159,6 +193,15 @@ The matrix contains **320 configurations**:
 - **E4:** heterogeneous freshness with strict `F_max=20 ms` and relaxed `F_max=500 ms`, including native NDN with global freshness periods of 20 ms and 500 ms.
 
 The runner is resumable: completed runs are skipped unless `--force` is specified.
+
+### 4.1 Full-matrix runner parameters
+
+| Parameter | Example | Meaning |
+|---|---:|---|
+| `--ns3-root` | `"$NS3_ROOT"` | Path to the ns-3/ndnSIM source tree. |
+| `--results-root` | `paper-results-v2` | Directory in which the full experiment matrix is stored. |
+| `--runs` | `20` | Number of paired independent repetitions for each configuration. |
+| `--force` | flag | Re-runs configurations even if their output already exists. Omit it for normal resumable execution. |
 
 ## 5. Analyze results
 
@@ -290,3 +333,12 @@ For the full explanation, see [`docs/TUTORIAL.md`](docs/TUTORIAL.md) and [`docs/
 ## License
 
 Before publishing the repository publicly, choose and add an explicit open-source license. MIT is a simple option for research code, but the appropriate license should be selected according to your institution, co-author, and dependency requirements.
+
+## Cite this work
+
+If you use this repository in academic work, please cite the associated paper.
+
+```bibtex
+
+```
+
