@@ -17,13 +17,7 @@ The main purpose is to quantify the trade-off among **Age of Information (AoI), 
 
 ## 1. Tested environment
 
-The experiment was developed and validated with an ndnSIM tree whose ndnSIM commit is:
-
-```text
-90d5039
-```
-
-The environment checker identifies this as the ndnSIM 2.9 preparation tree with the NFD 22.02 / ndn-cxx 0.8.x API generation used by this implementation.
+The environment checker identifies this as the ndnSIM 2.9 preparation tree with the NFD 22.02 API generation used by this implementation.
 
 The scripts assume an ns-3 tree containing:
 
