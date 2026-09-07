@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Editors
+.vscode/
+.idea/
+*~
+
+# Local experiment outputs
+paper-results*/
+smoke-v030/
+single-run-results/
+tutorial-results/
+results/
+logs/
+
+# Generated figures/tables at repository root
+*.pdf
+*.png
+*.svg
+summary.csv
+summary-ci95.csv
+all-requests.csv
+all-offered-requests.csv
+all-timeouts.csv
+pairing-validation.csv
+analysis-data-quality.csv
+
+# ns-3 local artifacts if repository is copied into the ns-3 tree
+build/
+*.o
+*.so
+*.a
+
+# Patch backups
+*.dtstudy.bak
